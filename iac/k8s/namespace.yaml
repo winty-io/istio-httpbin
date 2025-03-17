@@ -4,3 +4,4 @@ metadata:
   name: istio-httpbin
 labels:
   istio-injection: enabled
+  kubernetes.io/metadata.name: istio-httpbin
