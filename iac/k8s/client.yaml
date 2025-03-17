@@ -20,7 +20,7 @@ spec:
         args:
         - |
           while true; do
-            curl -H "Authorization: Bearer $TOKEN" http://app-server.auth-namespace.svc.cluster.local;
+            curl -H "Authorization: Bearer $TOKEN" http://httpbin.istio-httpbin.svc.cluster.local;
             sleep 10;
           done
         env:
