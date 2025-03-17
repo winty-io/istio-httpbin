@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: app-server
+      app: httpbin
   action: ALLOW
   rules:
   - from:
