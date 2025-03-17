@@ -9,4 +9,4 @@ spec:
       app: httpbin
   jwtRules:
   - issuer: "testing@secure.istio.io"
-    jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.18/security/tools/jwt/samples/jwks.json"
+    jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.25/security/tools/jwt/samples/jwks.json"
