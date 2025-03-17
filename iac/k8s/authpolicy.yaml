@@ -1,0 +1,22 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin
+  namespace: istio-httpbin
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+  rules:
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+  - to:
+    - operation:
+        paths: ["/status/418"]
+  - from:
+    - source:
+        requestPrincipals: ["issuer-foo/*"]
+  - to:
+    - operation:
+        paths: ["/headers"]
