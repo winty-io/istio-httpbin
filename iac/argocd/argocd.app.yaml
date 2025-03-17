@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-httpbin
+spec:
+  destination:
+    name: ''
+    namespace: istio-httpbin
+    server: https://kubernetes.default.svc
+  source:
+    path: ./iac/k8s
+    repoURL: https://github.com/winty-io/istio-httpbin
+    targetRevision: HEAD
+    directory:
+      recurse: false
+  sources: []
+  project: default
+  syncPolicy:
+    automated: null
