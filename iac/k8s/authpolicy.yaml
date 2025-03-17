@@ -1,22 +1,14 @@
-apiVersion: security.istio.io/v1
+apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: httpbin
+  name: require-jwt
   namespace: istio-httpbin
 spec:
   selector:
     matchLabels:
-      app: httpbin
+      app: app-server
+  action: ALLOW
   rules:
   - from:
     - source:
-        requestPrincipals: ["*"]
-  - to:
-    - operation:
-        paths: ["/status/418"]
-  - from:
-    - source:
-        requestPrincipals: ["issuer-foo/*"]
-  - to:
-    - operation:
-        paths: ["/headers"]
+        requestPrincipals: ["testing@secure.istio.io/testing@secure.istio.io"]
