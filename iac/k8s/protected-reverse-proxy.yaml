@@ -102,6 +102,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: reverse-proxy
+            name: reverse-proxy-service
             port:
               number: 80
