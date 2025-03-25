@@ -41,6 +41,7 @@ spec:
       labels:
         app: reverse-proxy
     spec:
+      serviceAccountName: reverse-proxy-sa
       containers:
       - name: nginx
         image: nginx:alpine
@@ -117,3 +118,20 @@ spec:
        app: reverse-proxy
   mtls:
     mode: PERMISSIVE
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: reverse-proxy-sa
+  namespace: gateway
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: httpbin-dr
+  namespace: istio-httpbin
+spec:
+  host: hardened-httpbin.istio-httpbin.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL  # Enforces mTLS
