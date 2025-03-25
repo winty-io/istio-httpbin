@@ -105,3 +105,15 @@ spec:
             name: reverse-proxy-service
             port:
               number: 80
+---
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: "gateway-policy"
+  namespace: "gateway"
+spec:
+  selector:
+     matchLabels:
+       app: reverse-proxy
+  mtls:
+    mode: PERMISSIVE
