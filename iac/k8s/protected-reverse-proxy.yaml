@@ -134,4 +134,19 @@ spec:
   host: hardened-httpbin.istio-httpbin.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: ISTIO_MUTUAL  # Enforces mTLS
+      mode: ISTIO_MUTUAL # Enforces mTLS
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-reverse-proxy
+  namespace: istio-httpbin
+spec:
+  selector:
+    matchLabels:
+      app: hardened-httpbin
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/gateway/sa/reverse-proxy-sa"]
