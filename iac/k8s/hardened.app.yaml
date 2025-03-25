@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hardened-httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hardened-httpbin
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hardened-httpbin
+        version: v1
+    spec:
+      serviceAccountName: httpbin
+      containers:
+      - image: docker.io/mccutchen/go-httpbin:v2.15.0
+        imagePullPolicy: IfNotPresent
+        name: hardened-httpbin
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hardened-httpbin
+  namespace: istio-httpbin
+  labels:
+    app: hardened-httpbin
+    service: hardened-httpbin
+spec:
+  ports:
+  - protocol: TCP
+    name: http
+    port: 8000
+    targetPort: 8080
+  selector:
+    app: hardened-httpbin
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hardened-httpbin-ingress
+  namespace: istio-httpbin
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - hardened-httpbin.winty.server
+    secretName: hardened-httpbin-tls-secret
+  rules:
+  - host: hardened-httpbin.winty.server
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hardened-httpbin
+            port:
+              number: 8000
+---
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: "hardened-httpbin-policy"
+  namespace: "istio-httpbin"
+spec:
+  selector:
+     matchLabels:
+       app: hardened-httpbin
+  mtls:
+    mode: STRICT
+    
