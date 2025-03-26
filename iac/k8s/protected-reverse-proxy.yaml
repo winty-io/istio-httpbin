@@ -135,7 +135,7 @@ apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: httpbin-dr
-  namespace: istio-httpbin
+  namespace: gateway
 spec:
   host: hardened-httpbin.istio-httpbin.svc.cluster.local
   trafficPolicy:
