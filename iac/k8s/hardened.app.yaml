@@ -51,3 +51,42 @@ spec:
        app: hardened-httpbin
   mtls:
     mode: STRICT
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hardened-httpbin-ingress
+  namespace: istio-httpbin
+  annotations:
+    kubernetes.io/ingress.class: istio
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - hardened.winty.server
+    secretName: hardened-tls-secret
+  rules:
+  - host: hardened.winty.server
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hardened-httpbin
+            port:
+              number: 8000
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hardened-cert
+  namespace: istio-httpbin
+spec:
+  secretName: hardened-tls-secret
+  dnsNames:
+  - hardened.winty.server
+  issuerRef:
+    name: selfsigned-issuer
+    kind: Issuer

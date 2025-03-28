@@ -4,7 +4,7 @@ metadata:
   name: httpbin-ingress
   namespace: istio-httpbin
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: istio
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
